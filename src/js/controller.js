@@ -17,41 +17,47 @@ const timeout = function (s) {
 
 ///////////////////////////////////////
 
-const renderSpinner = function(parentElement)
-{
+const renderSpinner = function (parentElement) {
   const html = `<div class="spinner">
           <svg>
             <use href="${icons}#icon-loader"></use>
           </svg>
         </div>`;
-          parentElement.innerHTML = '';
-          parentElement.insertAdjacentHTML('afterbegin',html);
-}
+  parentElement.innerHTML = '';
+  parentElement.insertAdjacentHTML('afterbegin', html);
+};
 
-const showRecipe = async function(){
-try{
- renderSpinner(recipeContainer);
-  const res = await fetch('https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bc886');
-  // const res = await fetch('https://forkify-api.jonas.io/api/v2/recipes/5ed6604591c37cdc054bc886');
-  const data = await res.json();
-  let {recipe} = data?.data;
+const showRecipe = async function () {
+  try {
+    const recipeId = window.location.hash.slice(1);
+    console.log(recipeId);
+    if(!recipeId) return;
+
+    renderSpinner(recipeContainer);
+    const res = await fetch(
+      `https://forkify-api.herokuapp.com/api/v2/recipes/${recipeId}`
+    );
+    // const res = await fetch('https://forkify-api.jonas.io/api/v2/recipes/5ed6604591c37cdc054bc886');
+    const data = await res.json();
+    let { recipe } = data?.data;
     console.log(recipe);
-  recipe = {
-    id: recipe.id,
-    ingredients: recipe.ingredients,
-    title: recipe.title,
-    publisher: recipe.publisher,
-    ingredients: recipe.ingredients,
-    image: recipe.image_url,
-    source: recipe.source_url,
-    cookingTime:recipe.cooking_time,
-    servings:recipe.servings
-  };
-  console.log(recipe);
+    recipe = {
+      id: recipe.id,
+      ingredients: recipe.ingredients,
+      title: recipe.title,
+      publisher: recipe.publisher,
+      ingredients: recipe.ingredients,
+      image: recipe.image_url,
+      source: recipe.source_url,
+      cookingTime: recipe.cooking_time,
+      servings: recipe.servings,
+    };
+    // console.log(recipe);
 
-  const html = 
-  `<figure class="recipe__fig">
-          <img src="${recipe.image}" alt="${recipe.title}" class="recipe__img" />
+    const html = `<figure class="recipe__fig">
+          <img src="${recipe.image}" alt="${
+      recipe.title
+    }" class="recipe__img" />
           <h1 class="recipe__title">
             <span>${recipe.title}</span>
           </h1>
@@ -62,14 +68,18 @@ try{
             <svg class="recipe__info-icon">
               <use href="${icons}#icon-clock"></use>
             </svg>
-            <span class="recipe__info-data recipe__info-data--minutes">${recipe.cookingTime}</span>
+            <span class="recipe__info-data recipe__info-data--minutes">${
+              recipe.cookingTime
+            }</span>
             <span class="recipe__info-text">minutes</span>
           </div>
           <div class="recipe__info">
             <svg class="recipe__info-icon">
               <use href="${icons}#icon-users"></use>
             </svg>
-            <span class="recipe__info-data recipe__info-data--people">${recipe.servings}</span>
+            <span class="recipe__info-data recipe__info-data--people">${
+              recipe.servings
+            }</span>
             <span class="recipe__info-text">servings</span>
 
             <div class="recipe__info-buttons">
@@ -101,18 +111,22 @@ try{
         <div class="recipe__ingredients">
           <h2 class="heading--2">Recipe ingredients</h2>
           <ul class="recipe__ingredient-list">
-           ${recipe.ingredients.map(ing =>{
-                  return `<li class="recipe__ingredient">
+           ${recipe.ingredients
+             .map(ing => {
+               return `<li class="recipe__ingredient">
               <svg class="recipe__icon">
                 <use href="${icons}#icon-check"></use>
               </svg>
-              <div class="recipe__quantity">${ing.quantity ? ing.quantity : ''}</div>
+              <div class="recipe__quantity">${
+                ing.quantity ? ing.quantity : ''
+              }</div>
               <div class="recipe__description">
                 <span class="recipe__unit">${ing.unit}</span>
                 ${ing.description}
               </div>
             </li>`;
-                }).join('')}
+             })
+             .join('')}
           </ul>
         </div>
 
@@ -120,7 +134,9 @@ try{
           <h2 class="heading--2">How to cook it</h2>
           <p class="recipe__directions-text">
             This recipe was carefully designed and tested by
-            <span class="recipe__publisher">${recipe.publisher}</span>. Please check out
+            <span class="recipe__publisher">${
+              recipe.publisher
+            }</span>. Please check out
             directions at their website.
           </p>
           <a
@@ -134,14 +150,20 @@ try{
             </svg>
           </a>
         </div>`;
-        recipeContainer.innerHTML='';
-        recipeContainer.insertAdjacentHTML("afterbegin",html);
+    recipeContainer.innerHTML = '';
+    recipeContainer.insertAdjacentHTML('afterbegin', html);
 
-  // console.log('Hello');
-}
-catch(err){
-  alert(err);
-}
+    // console.log('Hello');
+  } catch (err) {
+    alert(err);
+  }
 };
 
 showRecipe();
+
+// window.addEventListener('hashchange', showRecipe);
+// window.addEventListener('load', showRecipe);
+
+['hashchange','load'].forEach(ev=> window.addEventListener(ev,showRecipe));
+
+
