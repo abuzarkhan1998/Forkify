@@ -3,14 +3,6 @@ import 'regenerator-runtime/runtime';
 import * as recipeModel from './model.js';
 import recipeView from './views/recipeView.js'
 
-const timeout = function (s) {
-  return new Promise(function (_, reject) {
-    setTimeout(function () {
-      reject(new Error(`Request took too long! Timeout after ${s} second`));
-    }, s * 1000);
-  });
-};
-
 // NEW API URL (instead of the one shown in the video)
 // https://forkify-api.jonas.io
 
@@ -18,8 +10,9 @@ const timeout = function (s) {
 
 const showRecipe = async function () {
   try {
+    const recipeId = window.location.hash.slice(1);   
+     if(!recipeId) return;  
     recipeView.renderSpinnder();
-    const recipeId = window.location.hash.slice(1);    
     await recipeModel.loadRecipe(recipeId);
     console.log(recipeModel.state);
     recipeView.renderView(recipeModel.state.recipe);
