@@ -10,7 +10,7 @@ export const loadRecipe = async function(recipeId){
     if(!recipeId) return;
     const data = await returnJson(`${API_URL}/${recipeId}`);
         const { recipe :recipeResponse } = data?.data;
-        console.log(recipeResponse);
+        // console.log(recipeResponse);
         state.recipe = {
           id: recipeResponse.id,
           ingredients: recipeResponse.ingredients,

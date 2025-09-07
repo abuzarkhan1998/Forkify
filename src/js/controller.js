@@ -14,7 +14,7 @@ const showRecipe = async function () {
      if(!recipeId) return;  
     recipeView.renderSpinnder();
     await recipeModel.loadRecipe(recipeId);
-    console.log(recipeModel.state);
+    // console.log(recipeModel.state);
     recipeView.renderView(recipeModel.state.recipe);
     // console.log('Hello');
   } catch (err) {
