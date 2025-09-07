@@ -22,11 +22,13 @@ const showRecipe = async function () {
   }
 };
 
-showRecipe();
 
 // window.addEventListener('hashchange', showRecipe);
 // window.addEventListener('load', showRecipe);
 
-['hashchange','load'].forEach(ev=> window.addEventListener(ev,showRecipe));
+const init = function(){
+  recipeView.addHandlerRender(showRecipe);
+}
 
+init();
 
