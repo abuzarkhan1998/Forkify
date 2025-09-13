@@ -2,7 +2,7 @@ import { API_URL } from "./config.js";
 import {returnJson} from "./helper.js"
 
 export const state = {
-    recipe : {}
+    recipe : {},
 }
 
 export const loadRecipe = async function(recipeId){
@@ -28,3 +28,5 @@ export const loadRecipe = async function(recipeId){
        throw err;
     }
 }
+
+// export const loadSearchResult(query)
